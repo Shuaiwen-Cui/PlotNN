@@ -8,12 +8,17 @@ arch = [
     to_cor(),
     to_begin(),
     
+    # elements
     to_Signal( "signal", s_filer=6000, n_filer=1, offset="(0,0,0)", to="(0,0,0)", width=2, height=2, depth=40, caption="raw signal" ),
     to_Signal( "time", s_filer=64, n_filer=1, offset="(3,0,5)", to="(0,0,0)", width=2, height=2, depth=15, caption="time-domain" ),
     to_Signal( "freq", s_filer=64, n_filer=1, offset="(3,0,-5)", to="(0,0,0)", width=2, height=2, depth=15, caption="freq-domain" ),
+    to_Signal( "features", s_filer=128, n_filer=1, offset="(6,0,0)", to="(0,0,0)", width=2, height=2, depth=30, caption="features" ),
+    
+    
+    
+    # connections
     to_connect_near_west("signal", "time", 0, 0, 1),
     to_connect_far_west("signal", "freq", 0, 0, -1),
-    to_Signal( "features", s_filer=128, n_filer=1, offset="(6,0,0)", to="(0,0,0)", width=2, height=2, depth=30, caption="features" ),
     to_connect_east_near("time", "features", 2.8, 0, 0),
     to_connect_east_far("freq", "features", 2.8, 0, 0),
     # to_Filter( "filter", s_filer=3, n_filer=1, offset="(0,0,3)", to="(0,0,0)", width=2, height=2, depth=6, caption="filter" ),
