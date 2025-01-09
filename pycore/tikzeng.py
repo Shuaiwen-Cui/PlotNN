@@ -14,13 +14,16 @@ def to_head( projectpath ):
 def to_cor():
     return r"""
 \def\SignalColor{rgb:yellow,5;red,2.5;white,5}
-\def\FilterColor{rgb:yellow,5;red,5;white,5}
-\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\FilterColor{rgb:yellow,5;red,5;white,2}
+\def\ConvColor{rgb:yellow,2.5;red,2.5;white,2.5}
+\def\ElementColor{rgb:red,0.3;blue,0.3}
 \def\ConvReluColor{rgb:yellow,5;red,5;white,5}
-\def\PoolColor{rgb:red,1;black,0.3}
+\def\RELUColor{rgb:magenta,5;black,7}
+\def\BNColor{rgb:blue,2;green,1;black,0.3}
+\def\PoolColor{rgb:green,1;black,0.3}
 \def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
 \def\FcColor{rgb:blue,5;red,2.5;white,5}
-\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\FcReluColor{rgb:blue,5;green,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}   
 \def\SumColor{rgb:blue,5;green,15}
 """
@@ -43,13 +46,14 @@ def to_input( pathfile, to='(-3,0,0)', width=8, height=8, name="temp" ):
 """
 
 # Signal
-def to_Signal( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+def to_Signal( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +r""",
         xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
         zlabel="""+ str(s_filer) +""",
         fill=\SignalColor,
         height="""+ str(height) +""",
@@ -60,13 +64,32 @@ def to_Signal( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", wi
 """
 
 # Filter
-def to_Filter( name, s_filer=3, n_filer=1, offset="(0,0,0)", to="(0,0,0)", width=2, height=2, depth=6, caption=" " ):
+def to_Filter( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        % xlabel={{"""+ str(n_filer) +""", }},
+        % ylabel="""+ str(c_fier) +""",
+        % zlabel="""+ str(s_filer) +""",
+        fill=\FilterColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# Filter
+def to_Filters( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +r""",
         xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
         zlabel="""+ str(s_filer) +""",
         fill=\FilterColor,
         height="""+ str(height) +""",
@@ -77,15 +100,126 @@ def to_Filter( name, s_filer=3, n_filer=1, offset="(0,0,0)", to="(0,0,0)", width
 """
 
 # Conv
-def to_Conv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+def to_Conv( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +r""",
         xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
         zlabel="""+ str(s_filer) +""",
-        fill=\SignalColor,
+        fill=\ConvColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# Element
+def to_Element( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=1, depth=2, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        % xlabel={{"""+ str(n_filer) +""", }},
+        % ylabel="""+ str(c_fier) +""",
+        % zlabel="""+ str(s_filer) +""",
+        fill=\ElementColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+
+
+# BN
+def to_BN( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\BNColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# relu
+def to_RELU( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\RELUColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# avg
+def to_AVG( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\PoolColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# FC
+def to_FC( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\FcColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# SOFTMAX
+def to_SOFTMAX( name, s_filer=256, c_fier=1, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        ylabel="""+ str(c_fier) +""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\SoftmaxColor,
         height="""+ str(height) +""",
         width="""+ str(width) +""",
         depth="""+ str(depth) +"""
